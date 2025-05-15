@@ -80,4 +80,99 @@
       color: white;
       background-color: #4f46e5;
       border: none;
-      border-radius: 9999px
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background-color: #4338ca;
+    }
+
+    #summary {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background-color: #f0fdf4;
+      border-radius: 1rem;
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #166534;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🌈 Vibe Check</h1>
+    <p class="subtitle">Tell us how you're feeling today!</p>
+
+    <div class="question">
+      <label for="workMood">How are you feeling about work today?</label>
+      <input type="range" id="workMood" min="0" max="4" value="2" onchange="updateSlider(this)">
+      <div class="emoji-row" id="workMoodEmojis">😞 😕 😐 😊 😁</div>
+    </div>
+
+    <div class="question">
+      <label for="homeBalance">How's your work-life balance?</label>
+      <input type="range" id="homeBalance" min="0" max="4" value="2" onchange="updateSlider(this)">
+      <div class="emoji-row" id="homeBalanceEmojis">😞 😕 😐 😊 😁</div>
+    </div>
+
+    <div class="question">
+      <label for="energy">How much energy do you have right now?</label>
+      <input type="range" id="energy" min="0" max="4" value="2" onchange="updateSlider(this)">
+      <div class="emoji-row" id="energyEmojis">😞 😕 😐 😊 😁</div>
+    </div>
+
+    <div class="question">
+      <label for="support">Do you feel supported by your team?</label>
+      <input type="range" id="support" min="0" max="4" value="2" onchange="updateSlider(this)">
+      <div class="emoji-row" id="supportEmojis">😞 😕 😐 😊 😁</div>
+    </div>
+
+    <button class="submit-btn" onclick="handleSubmit()">🚀 Submit Vibes</button>
+
+    <div id="summary"></div>
+  </div>
+
+  <script>
+    const emojiFaces = ['😞', '😕', '😐', '😊', '😁'];
+
+    function updateSlider(slider) {
+      const id = slider.id + "Emojis";
+      const emojiRow = document.getElementById(id);
+      let updated = emojiFaces.map((emoji, i) => {
+        return i === parseInt(slider.value) ? `<span style="transform: scale(1.3);">${emoji}</span>` : emoji;
+      });
+      emojiRow.innerHTML = updated.join(" ");
+    }
+
+    function getOverallMood(avg) {
+      if (avg >= 3.5) return "😁 You're feeling awesome!";
+      if (avg >= 2.5) return "😊 You're feeling pretty good.";
+      if (avg >= 1.5) return "😐 You're feeling okay.";
+      if (avg >= 0.5) return "😕 You might be having a rough day.";
+      return "😞 You seem really down today.";
+    }
+
+    function handleSubmit() {
+      const values = [
+        parseInt(document.getElementById("workMood").value),
+        parseInt(document.getElementById("homeBalance").value),
+        parseInt(document.getElementById("energy").value),
+        parseInt(document.getElementById("support").value)
+      ];
+
+      const average = values.reduce((a, b) => a + b, 0) / values.length;
+      const moodSummary = getOverallMood(average);
+
+      const summaryDiv = document.getElementById("summary");
+      summaryDiv.textContent = moodSummary;
+      summaryDiv.style.display = "block";
+    }
+  </script>
+
+</body>
+</html>
